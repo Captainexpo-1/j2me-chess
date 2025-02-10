@@ -5,20 +5,20 @@ import javax.microedition.midlet.*;
 public class RetrospectMIDlet
         extends MIDlet
         implements CommandListener {
-    private PixilartCanvas mCanvas = new PixilartCanvas(32, 32);
+
+    private ChessGame mDisplay;
 
     public RetrospectMIDlet() {
-        mCanvas.setCommandListener(this);
-        mCanvas.addCommand(new Command("Exit", Command.EXIT, 0));
+        mDisplay = new ChessGame(new Board());
 
+        mDisplay.addCommand(new Command("Exit", Command.EXIT, 0));
+        mDisplay.setCommandListener(this);
+
+        mDisplay.start();
     }
 
     public void startApp() {
-        Display.getDisplay(this).setCurrent(mCanvas);
-
-        mCanvas.start();
-        mCanvas.run();
-
+        Display.getDisplay(this).setCurrent(mDisplay);
     }
 
     public void pauseApp() {
