@@ -1,3 +1,4 @@
+
 import java.util.Vector;
 
 public class Utils {
@@ -14,6 +15,14 @@ public class Utils {
         String[] result = new String[v.size()];
         for (int i = 0; i < v.size(); i++) {
             result[i] = (String) v.elementAt(i);
+        }
+        return result;
+    }
+
+    public static Object[] reverse(Object[] arr) {
+        Object[] result = new Object[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            result[i] = arr[arr.length - i - 1];
         }
         return result;
     }

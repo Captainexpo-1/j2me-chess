@@ -1,3 +1,4 @@
+
 import java.util.Vector;
 
 class MoveList {
@@ -46,12 +47,10 @@ class MoveList {
         return false;
     }
 
-    public void remove(Move move) {
-        moves.removeElement(move);
-    }
-
-    public void remove(int index) {
+    public Move remove(int index) {
+        Move m = (Move) moves.elementAt(index);
         moves.removeElementAt(index);
+        return m;
     }
 
     public MoveList clone() {

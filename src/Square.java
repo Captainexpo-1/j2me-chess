@@ -1,3 +1,4 @@
+
 public class Square {
     public int rank; // 1-8
     public int file; // 1-8

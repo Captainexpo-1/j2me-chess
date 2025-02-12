@@ -1,3 +1,4 @@
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
@@ -6,11 +7,15 @@ public class ChessGame extends Canvas implements Runnable {
     // ASCII display of the chess board
 
     Board board;
+    ChessBot bot;
 
     public String moveInp = "";
 
-    public ChessGame(Board b) {
+    public int playerColor = Piece.WHITE;
+
+    public ChessGame(Board b, ChessBot bot) {
         board = b;
+        this.bot = bot;
     }
 
     public void start() {
@@ -46,10 +51,10 @@ public class ChessGame extends Canvas implements Runnable {
         g.drawString("Move: " + moveInp, 0, 80, Graphics.TOP | Graphics.LEFT);
     }
 
-    private void paintMultiLineString(Graphics g, String s, int x, int y) {
-        String[] lines = Utils.split(s, ' ');
+    private void paintMultiLineString(Graphics g, String s, int x, int y, boolean reverse, char delimiter) {
+        String[] lines = Utils.split(s, delimiter);
         for (int i = 0; i < lines.length; i++) {
-            g.drawString(lines[i], x, y + i * 10, Graphics.TOP | Graphics.LEFT);
+            g.drawString(lines[reverse ? (lines.length - i - 1) : i], x, y + i * 10, Graphics.TOP | Graphics.LEFT);
         }
     }
 
@@ -57,16 +62,44 @@ public class ChessGame extends Canvas implements Runnable {
         g.setColor(255, 255, 255);
         g.drawString("Move history:", 0, 100, Graphics.TOP | Graphics.LEFT);
         String moves = board.moveHistory.toString();
-        paintMultiLineString(g, moves, 0, 110);
+        if (moves.length() >= 15) {
+            moves = moves.substring(moves.length() - 15);
+        }
+        if (moves.length() == 0) {
+            moves = "No moves yet";
+            g.drawString(moves, 0, 110, Graphics.TOP | Graphics.LEFT);
+            return;
+        }
+
+        paintMultiLineString(g, moves, 0, 110, true, ' ');
+    }
+
+    private void paintTurn(Graphics g) {
+        g.setColor(255, 255, 255);
+        g.drawString("Turn: " + (board.turn ? "White" : "Black"), 0, 200, Graphics.TOP | Graphics.LEFT);
     }
 
     protected void paint(Graphics g) {
         paintBoard(g);
         paintMoveInput(g);
         paintMoveHistory(g);
+        paintTurn(g);
+    }
+
+    public void isBotTurn() {
+        if ((board.turn ? Piece.WHITE : Piece.BLACK) != playerColor) {
+            System.out.println("Bot turn " + board.getStateString());
+            if (bot != null) {
+                Move botMove = bot.getMove(board);
+                board.makeMove(botMove);
+            }
+        }
     }
 
     public void onEnterPressed() {
+        if ((board.turn ? Piece.WHITE : Piece.BLACK) != playerColor) {
+            return;
+        }
         if (moveInp.length() == 4) {
             Square from, to;
             try {
@@ -75,10 +108,12 @@ public class ChessGame extends Canvas implements Runnable {
             } catch (IllegalArgumentException e) {
                 return;
             }
-            Move move = new Move(from, to, board.getPiece(from));
+            Move move = new Move(from, to, board.getPiece(from), board.getPiece(to).type);
             if (board.isValidMove(move)) {
-                board.movePiece(move);
+                board.makeMove(move);
                 moveInp = "";
+
+                isBotTurn();
             }
 
         }
