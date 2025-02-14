@@ -60,4 +60,8 @@ class MoveList {
         }
         return clone;
     }
+
+    public Move random() {
+        return (Move) this.moves.elementAt((int) Math.floor(Utils.random() * this.moves.size()));
+    }
 }

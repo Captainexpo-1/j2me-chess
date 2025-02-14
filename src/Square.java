@@ -7,6 +7,10 @@ public class Square {
         this.file = file;
     }
 
+    public boolean isValid() {
+        return rank >= 0 && rank < 8 && file >= 0 && file < 8;
+    }
+
     public Square(String square, boolean allowLetters) {
         if (square.length() != 2) {
             throw new IllegalArgumentException("Invalid square: " + square);
@@ -29,11 +33,11 @@ public class Square {
         if (rankChar < '1' || rankChar > '8') {
             throw new IllegalArgumentException("Invalid rank: " + rankChar);
         }
-        this.rank = 7 - (rankChar - '1');
+        this.rank = rankChar - '1';
     }
 
     public String toString() {
-        return (char) (file + 'a') + "" + (rank + 1);
+        return (char) ('a' + file) + "" + (8 - rank);
     }
 
     public boolean equals(Object o) {

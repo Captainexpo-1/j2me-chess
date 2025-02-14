@@ -8,10 +8,20 @@ public class Piece {
 
     protected int type;
     protected Color color;
+    private Square square;
 
-    public Piece(int type, Color color) {
+    public Piece(int type, Color color, Square square) {
         this.type = type;
         this.color = color;
+        this.square = square;
+    }
+
+    public void setSquare(Square square) {
+        this.square = square;
+    }
+
+    public Square getSquare() {
+        return square;
     }
 
     public int getType() {
@@ -51,5 +61,9 @@ public class Piece {
             default:
                 return "U";
         }
+    }
+
+    public String toLongString() {
+        return "Piece(" + getChar() + ", " + color + ", " + square + ")";
     }
 }

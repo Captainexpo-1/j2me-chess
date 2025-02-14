@@ -15,7 +15,7 @@ public class PieceList {
             color = piece.color;
             pieceType = piece.type;
         } else {
-            if (!color.is(piece.color)) {
+            if (color != piece.color) {
                 throw new IllegalArgumentException("PieceList must contain pieces of the same color");
             }
             if (pieceType != piece.type) {
@@ -43,7 +43,7 @@ public class PieceList {
     public String toString() {
         String str = "[";
         for (int i = 0; i < size; i++) {
-            str += pieces[i] + ",";
+            str += pieces[i].toLongString() + ",";
         }
         return str + "]";
     }

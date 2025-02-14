@@ -1,8 +1,12 @@
 
 public class SimpleBot implements ChessBot {
+    MovesGenerator generator = new MovesGenerator(null);
 
     public Move getMove(ChessBoard board) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        generator.setBoard(board);
+        MoveList moves = generator.allValidMoves();
+        System.out.println("BOT MOVES: " + moves.toString());
+        return moves.random();
     }
 
 }

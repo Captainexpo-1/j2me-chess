@@ -8,17 +8,17 @@ public class Move {
     Square from;
     Square to;
     Piece piece;
-    int capturedPieceType;
+    Piece capturedPiece;
     int type;
 
-    public Move(ChessBoard board, Square from, Square to, Piece piece, int capturedPieceType) {
+    public Move(ChessBoard board, Square from, Square to, Piece piece, Piece capturedPiece) {
         this.from = from;
         this.to = to;
         this.piece = piece;
         if (piece == null) {
             throw new IllegalArgumentException("Piece cannot be null");
         }
-        this.capturedPieceType = capturedPieceType;
+        this.capturedPiece = capturedPiece;
         checkType(board); // Ensure type is set when move is created
     }
 

@@ -2,6 +2,7 @@
 import java.util.Vector;
 
 public class Utils {
+
     public static String[] split(String str, char delimiter) {
         Vector v = new Vector();
         int start = 0;
@@ -25,5 +26,14 @@ public class Utils {
             result[i] = arr[arr.length - i - 1];
         }
         return result;
+    }
+
+    public static int seed = 311107;
+
+    public static double random() {
+        seed ^= seed << 21;
+        seed ^= seed >>> 35;
+        seed ^= seed << 4;
+        return Math.abs(((double) seed) / 2147483648.0);
     }
 }

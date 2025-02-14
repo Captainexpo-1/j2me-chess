@@ -13,9 +13,10 @@ public class ChessGame extends Canvas implements Runnable {
 
     public Color playerColor = Color.WHITE;
 
-    public ChessGame(ChessBoard b, ChessBot bot) {
-        board = b;
-        b.initializeBoard();
+    public ChessGame(ChessBot bot) {
+
+        board = new ChessBoard();
+        board.initializeBoard();
         this.bot = bot;
     }
 
@@ -77,7 +78,8 @@ public class ChessGame extends Canvas implements Runnable {
 
     private void paintTurn(Graphics g) {
         g.setColor(255, 255, 255);
-        g.drawString("Turn: " + (board.turn.is(Color.WHITE) ? "White" : "Black"), 0, 200, Graphics.TOP | Graphics.LEFT);
+        g.drawString("Turn: " + (board.turn == (Color.WHITE) ? "White" : "Black"), 0, 200,
+                Graphics.TOP | Graphics.LEFT);
     }
 
     protected void paint(Graphics g) {
@@ -88,12 +90,10 @@ public class ChessGame extends Canvas implements Runnable {
     }
 
     public void isBotTurn() {
-        if (!(board.turn.is(Color.WHITE) ? Color.WHITE : Color.BLACK).is(playerColor)) {
-            System.out.println("Bot turn");
-            if (bot != null) {
-                Move botMove = bot.getMove(board);
-                board.makeMove(botMove);
-            }
+        System.out.println("Bot turn: " + board.turn.toString());
+        if (bot != null) {
+            Move botMove = bot.getMove(board);
+            board.makeMove(botMove);
         }
     }
 
@@ -110,8 +110,7 @@ public class ChessGame extends Canvas implements Runnable {
                 return;
             }
             System.out.println("Move: " + from + " -> " + to);
-            Move move = new Move(board, from, to, board.getPieceAt(from),
-                    board.getPieceAt(to) != null ? board.getPieceAt(to).type : -1);
+            Move move = new Move(board, from, to, board.getPieceAt(from), board.getPieceAt(to));
             if (board.isValidMove(move)) {
                 board.makeMove(move);
                 moveInp = "";
