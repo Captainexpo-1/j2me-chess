@@ -6,15 +6,16 @@ import javax.microedition.lcdui.Graphics;
 public class ChessGame extends Canvas implements Runnable {
     // ASCII display of the chess board
 
-    Board board;
+    ChessBoard board;
     ChessBot bot;
 
     public String moveInp = "";
 
-    public int playerColor = Piece.WHITE;
+    public Color playerColor = Color.WHITE;
 
-    public ChessGame(Board b, ChessBot bot) {
+    public ChessGame(ChessBoard b, ChessBot bot) {
         board = b;
+        b.initializeBoard();
         this.bot = bot;
     }
 
@@ -40,7 +41,7 @@ public class ChessGame extends Canvas implements Runnable {
         g.fillRect(0, 0, getWidth(), getHeight());
 
         g.setColor(255, 255, 255);
-        String[] strings = board.toStrings();
+        String[] strings = board.getBoardStrings();
         for (int i = 0; i < strings.length; i++) {
             g.drawString(strings[i], 0, i * 10, Graphics.TOP | Graphics.LEFT);
         }
@@ -61,7 +62,7 @@ public class ChessGame extends Canvas implements Runnable {
     private void paintMoveHistory(Graphics g) {
         g.setColor(255, 255, 255);
         g.drawString("Move history:", 0, 100, Graphics.TOP | Graphics.LEFT);
-        String moves = board.moveHistory.toString();
+        String moves = board.getMoveHistory().toString();
         if (moves.length() >= 15) {
             moves = moves.substring(moves.length() - 15);
         }
@@ -76,7 +77,7 @@ public class ChessGame extends Canvas implements Runnable {
 
     private void paintTurn(Graphics g) {
         g.setColor(255, 255, 255);
-        g.drawString("Turn: " + (board.turn ? "White" : "Black"), 0, 200, Graphics.TOP | Graphics.LEFT);
+        g.drawString("Turn: " + (board.turn.is(Color.WHITE) ? "White" : "Black"), 0, 200, Graphics.TOP | Graphics.LEFT);
     }
 
     protected void paint(Graphics g) {
@@ -87,8 +88,8 @@ public class ChessGame extends Canvas implements Runnable {
     }
 
     public void isBotTurn() {
-        if ((board.turn ? Piece.WHITE : Piece.BLACK) != playerColor) {
-            System.out.println("Bot turn " + board.getStateString());
+        if (!(board.turn.is(Color.WHITE) ? Color.WHITE : Color.BLACK).is(playerColor)) {
+            System.out.println("Bot turn");
             if (bot != null) {
                 Move botMove = bot.getMove(board);
                 board.makeMove(botMove);
@@ -97,7 +98,7 @@ public class ChessGame extends Canvas implements Runnable {
     }
 
     public void onEnterPressed() {
-        if ((board.turn ? Piece.WHITE : Piece.BLACK) != playerColor) {
+        if (!board.turn.is(playerColor)) {
             return;
         }
         if (moveInp.length() == 4) {
@@ -108,7 +109,9 @@ public class ChessGame extends Canvas implements Runnable {
             } catch (IllegalArgumentException e) {
                 return;
             }
-            Move move = new Move(from, to, board.getPiece(from), board.getPiece(to).type);
+            System.out.println("Move: " + from + " -> " + to);
+            Move move = new Move(board, from, to, board.getPieceAt(from),
+                    board.getPieceAt(to) != null ? board.getPieceAt(to).type : -1);
             if (board.isValidMove(move)) {
                 board.makeMove(move);
                 moveInp = "";

@@ -1,4 +1,3 @@
-
 public class Move {
 
     public static final int NORMAL = 0;
@@ -12,26 +11,27 @@ public class Move {
     int capturedPieceType;
     int type;
 
-    public void checkType() {
-        // TODO: Handle en passant
-        if (piece.type == Piece.PAWN) {
-            if (to.rank == 1 || to.rank == 8) {
-                type = PROMOTION;
-            } else {
-                type = NORMAL;
-            }
-        } else if (piece.type == Piece.KING && Math.abs(from.file - to.file) == 2) {
-            type = CASTLING;
-        } else {
-            type = NORMAL;
-        }
-    }
-
-    public Move(Square from, Square to, Piece piece, int capturedPieceType) {
+    public Move(ChessBoard board, Square from, Square to, Piece piece, int capturedPieceType) {
         this.from = from;
         this.to = to;
         this.piece = piece;
+        if (piece == null) {
+            throw new IllegalArgumentException("Piece cannot be null");
+        }
         this.capturedPieceType = capturedPieceType;
+        checkType(board); // Ensure type is set when move is created
+    }
+
+    private void checkType(ChessBoard board) {
+        if (piece.type == Piece.KING && Math.abs(from.file - to.file) == 2) {
+            type = CASTLING;
+        } else if (piece.type == Piece.PAWN && (to.rank == 0 || to.rank == 7)) {
+            type = PROMOTION;
+        } else if (piece.type == Piece.PAWN && board.getPieceAt(to) == null && from.file != to.file) {
+            type = ENPASSANT;
+        } else {
+            type = NORMAL;
+        }
     }
 
     public String toString() {
@@ -41,7 +41,7 @@ public class Move {
     public boolean equals(Object o) {
         if (o instanceof Move) {
             Move m = (Move) o;
-            return m.from.equals(from) && m.to.equals(to);
+            return m.from.equals(from) && m.to.equals(to) && m.piece.equals(piece);
         }
         return false;
     }

@@ -2,7 +2,7 @@
 public class PieceList {
     private Piece[] pieces;
     public int pieceType;
-    public int color;
+    public Color color;
     private int size;
 
     public PieceList() {
@@ -15,7 +15,7 @@ public class PieceList {
             color = piece.color;
             pieceType = piece.type;
         } else {
-            if (color != piece.color) {
+            if (!color.is(piece.color)) {
                 throw new IllegalArgumentException("PieceList must contain pieces of the same color");
             }
             if (pieceType != piece.type) {

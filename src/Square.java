@@ -1,7 +1,6 @@
-
 public class Square {
-    public int rank; // 1-8
-    public int file; // 1-8
+    public int rank; // 0-7
+    public int file; // 0-7
 
     public Square(int rank, int file) {
         this.rank = rank;
@@ -19,22 +18,22 @@ public class Square {
             if (fileChar < 'a' || fileChar > 'h') {
                 throw new IllegalArgumentException("Invalid file: " + fileChar);
             }
-            this.file = fileChar - 'a' + 1;
+            this.file = fileChar - 'a';
         } else {
             if (fileChar < '1' || fileChar > '8') {
                 throw new IllegalArgumentException("Invalid file: " + fileChar);
             }
-            this.file = fileChar - '0';
+            this.file = fileChar - '1';
         }
 
         if (rankChar < '1' || rankChar > '8') {
             throw new IllegalArgumentException("Invalid rank: " + rankChar);
         }
-        this.rank = rankChar - '0';
+        this.rank = 7 - (rankChar - '1');
     }
 
     public String toString() {
-        return (char) (file - 1 + 'a') + "" + rank;
+        return (char) (file + 'a') + "" + (rank + 1);
     }
 
     public boolean equals(Object o) {
@@ -46,6 +45,6 @@ public class Square {
     }
 
     public int hashCode() {
-        return rank * 10 + file;
+        return rank * 8 + file;
     }
 }

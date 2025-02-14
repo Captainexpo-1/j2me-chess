@@ -11,7 +11,7 @@ public class RetrospectMIDlet
     public RetrospectMIDlet() {
         SimpleBot bot = new SimpleBot();
 
-        mDisplay = new ChessGame(new Board(), bot);
+        mDisplay = new ChessGame(new ChessBoard(), bot);
 
         mDisplay.addCommand(new Command("Exit", Command.EXIT, 0));
         mDisplay.setCommandListener(this);

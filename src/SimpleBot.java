@@ -1,8 +1,8 @@
 
 public class SimpleBot implements ChessBot {
 
-    public Move getMove(Board board) {
-        return MovesGenerator.validMoves(board).get(0);
+    public Move getMove(ChessBoard board) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
