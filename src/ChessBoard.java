@@ -128,7 +128,6 @@ public class ChessBoard {
         moveHistory.add(move);
 
         this.turn = this.turn.opposite();
-        System.out.println("SET TURN TO: " + turn.toString());
 
         return true;
     }
@@ -164,9 +163,21 @@ public class ChessBoard {
         return this.board[square.rank][square.file];
     }
 
+    public Piece getPieceAt(int i, int j) {
+        return this.board[i][j];
+    }
+
+    public Piece getPieceAt(int i) {
+        return this.board[i / 8][i % 8];
+    }
+
     public void setPieceAt(Square square, Piece piece) {
         if (square == null) {
             throw new IllegalArgumentException("Square cannot be null");
+        }
+        Piece replacing = this.board[square.rank][square.file];
+        if (replacing != null) {
+            getPieceList(replacing.getColor(), replacing.getType()).remove(replacing);
         }
         this.board[square.rank][square.file] = piece;
         if (piece != null)
@@ -202,14 +213,14 @@ public class ChessBoard {
                     o += board[i][j].getChar();
                 }
             }
-            boardString[i] = o;
+            boardString[7 - i] = o;
         }
         return boardString;
     }
 
     public String toString() {
         String o = "";
-        for (int i = 0; i < 8; i++) {
+        for (int i = 7; i >= 0; i--) {
             for (int j = 0; j < 8; j++) {
                 if (board[i][j] == null) {
                     o += ".";

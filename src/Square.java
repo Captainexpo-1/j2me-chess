@@ -37,7 +37,7 @@ public class Square {
     }
 
     public String toString() {
-        return (char) ('a' + file) + "" + (8 - rank);
+        return (char) (file + 'a') + "" + (char) (rank + '1');
     }
 
     public boolean equals(Object o) {

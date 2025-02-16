@@ -64,4 +64,8 @@ class MoveList {
     public Move random() {
         return (Move) this.moves.elementAt((int) Math.floor(Utils.random() * this.moves.size()));
     }
+
+    public void set(int index, Move move) {
+        moves.setElementAt(move, index);
+    }
 }

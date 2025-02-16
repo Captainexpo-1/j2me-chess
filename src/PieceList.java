@@ -40,6 +40,24 @@ public class PieceList {
         return size;
     }
 
+    public Piece remove(int index) {
+        Piece piece = pieces[index];
+        for (int i = index; i < size - 1; i++) {
+            pieces[i] = pieces[i + 1];
+        }
+        size--;
+        return piece;
+    }
+
+    public Piece remove(Piece piece) {
+        for (int i = 0; i < size; i++) {
+            if (pieces[i] == piece) {
+                return remove(i);
+            }
+        }
+        return null;
+    }
+
     public String toString() {
         String str = "[";
         for (int i = 0; i < size; i++) {

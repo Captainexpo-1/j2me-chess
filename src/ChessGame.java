@@ -27,9 +27,10 @@ public class ChessGame extends Canvas implements Runnable {
 
     public void run() {
         while (true) {
-            repaint();
             try {
-                Thread.sleep(100);
+                repaint();
+
+                Thread.sleep(10);
             } catch (InterruptedException e) {
             }
         }
@@ -72,7 +73,6 @@ public class ChessGame extends Canvas implements Runnable {
             g.drawString(moves, 0, 110, Graphics.TOP | Graphics.LEFT);
             return;
         }
-
         paintMultiLineString(g, moves, 0, 110, true, ' ');
     }
 
@@ -90,11 +90,16 @@ public class ChessGame extends Canvas implements Runnable {
     }
 
     public void isBotTurn() {
+        long startTime = System.currentTimeMillis();
+
         System.out.println("Bot turn: " + board.turn.toString());
         if (bot != null) {
             Move botMove = bot.getMove(board);
             board.makeMove(botMove);
         }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Bot move took: " + (endTime - startTime) + " ms");
     }
 
     public void onEnterPressed() {

@@ -29,7 +29,6 @@ public class MovesGenerator {
     }
 
     public MoveList allMoves() {
-        System.out.println("Generating moves for: " + board.turn.toString());
         MoveList moves = new MoveList();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
